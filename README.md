@@ -104,9 +104,9 @@ Expense_Tracker/
 │   ├── src/
 │   │   ├── assets/           # Images, logo.png
 │   │   ├── components/       # Reusable components
-│   │   │   ├── common/       # EmptyState.jsx
+│   │   │   ├── common/       # EmptyState.jsx, ErrorState.jsx, Loader.jsx
 │   │   │   ├── dashboard/    # ExpenseChart.jsx, Summary.jsx
-│   │   │   ├── expense/      # ExpenseList.jsx, Filters.jsx, AddExpenseModal.jsx
+│   │   │   ├── expense/      # ExpenseCard.jsx, ExpenseForm.jsx, ExpenseList.jsx, Filters.jsx
 │   │   │   └── layout/       # Navbar.jsx, Sidebar.jsx
 │   │   ├── context/          # Context providers
 │   │   │   └── ExpenseContext.jsx # Global Expense state & API methods
@@ -133,9 +133,8 @@ Expense_Tracker/
 │   │   └── Expense.js        # Mongoose schema mapping to 'expenses' collection
 │   ├── routes/               # API endpoint router definitions
 │   │   └── expenseRoute.js   # Route definitions pointing to controller methods
-│   ├── utils/                # Utility helper functions
 │   ├── .env.example          # Backend environment variables template
-│   ├── app.js                # Sandbox entry point
+│   ├── app.js                # Entry point placeholder
 │   ├── package.json          # Backend dependencies & scripts
 │   └── server.js             # Express app setup, middlewares, routes, & listener
 │
@@ -216,7 +215,7 @@ flowchart TD
     end
 
     Schema --> |9. Resolves JS Object| Controller
-    Controller --> |10. HTTP 201 JSON Response| Axios
+    Controller --> |10. HTTP 211 JSON Response| Axios
     Axios --> |11. Update Global State| Context
     Context --> |12. Triggers Virtual DOM Diff| UI
 ```
