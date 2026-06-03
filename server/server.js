@@ -1,20 +1,57 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import connectDB from './config/db.js';
-import cors from 'cors';
-import expenseRoutes from './routes/expenseRoute.js'
+import express from "express"
+import dotenv from "dotenv"
+import cors from "cors"
 
-const app = express();
-app.use(cors({ origin: true }));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+import connectDB from "./config/db.js"
 
-dotenv.config({ override: true });
+import expenseRoutes from "./routes/expenseRoute.js"
+
+
+
+// Load Environment Variables FIRST
+dotenv.config()
+
+
+
+const app = express()
+
+
+
+// Middleware
+app.use(cors({
+  origin: process.env.CLIENT_URL,
+  credentials: true,
+}))
+
+app.use(express.json())
+
+app.use(express.urlencoded({
+  extended: true,
+}))
+
+
+
 // Routes
 app.use("/api/expenses", expenseRoutes)
 
 
-app.listen(process.env.PORT, () => {
-    connectDB();
-    console.log(`Server is running on port ${process.env.PORT}`);
-});
+
+// Test Route
+app.get("/", (req, res) => {
+  res.json({
+    success: true,
+    message: "Muneem API Running",
+  })
+})
+
+
+
+// Connect DB + Start Server
+const PORT = process.env.PORT || 5000
+
+app.listen(PORT, async () => {
+
+  await connectDB()
+
+  console.log(`Server is running on port ${PORT}`)
+})
