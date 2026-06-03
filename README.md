@@ -6,7 +6,6 @@
 [![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
 [![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
-[![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white)](https://jwt.io/)
 [![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com/)
 [![Render](https://img.shields.io/badge/Render-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://render.com/)
 
@@ -32,18 +31,17 @@ Muneem is a professional, responsive, and robust full-stack expense tracking web
 8.  [How Data Flows in the Application](#-how-data-flows-in-the-application)
 9.  [Architecture Flow](#-architecture-flow)
 10. [API Flow Explanation & Request-Response Cycle](#-api-flow-explanation--request-response-cycle)
-11. [Authentication Flow (JWT)](#-authentication-flow-jwt)
-12. [Environment Variables](#-environment-variables)
-13. [Installation Steps](#-installation-steps)
-14. [Running Project Locally](#-running-project-locally)
-15. [Deployment Steps](#-deployment-steps)
-16. [Screenshots](#-screenshots)
-17. [Challenges Faced](#-challenges-faced)
-18. [Learning Outcomes](#-learning-outcomes)
-19. [Future Improvements](#-future-improvements)
-20. [Contributing](#-contributing)
-21. [License](#-license)
-22. [Author Information](#-author-information)
+11. [Environment Variables](#-environment-variables)
+12. [Installation Steps](#-installation-steps)
+13. [Running Project Locally](#-running-project-locally)
+14. [Deployment Steps](#-deployment-steps)
+15. [Screenshots](#-screenshots)
+16. [Challenges Faced](#-challenges-faced)
+17. [Learning Outcomes](#-learning-outcomes)
+18. [Future Improvements](#-future-improvements)
+19. [Contributing](#-contributing)
+20. [License](#-license)
+21. [Author Information](#-author-information)
 
 ---
 
@@ -218,7 +216,7 @@ flowchart TD
     end
 
     Schema --> |9. Resolves JS Object| Controller
-    Controller --> |10. HTTP 210 JSON Response| Axios
+    Controller --> |10. HTTP 201 JSON Response| Axios
     Axios --> |11. Update Global State| Context
     Context --> |12. Triggers Virtual DOM Diff| UI
 ```
@@ -327,68 +325,6 @@ The backend exposes the following endpoints for the `/api/expenses` namespace:
 
 ---
 
-## 🔒 Authentication Flow (JWT)
-
-To prepare this portfolio project for enterprise requirements, here is the blueprint showing how JSON Web Token (JWT) authentication is structured within the backend:
-
-```mermaid
-sequenceDiagram
-    participant User as React SPA (Client)
-    participant Server as Express Server (API)
-    participant DB as MongoDB Atlas
-
-    User->>Server: 1. POST /api/auth/register (Credentials)
-    Server->>DB: Check if duplicate & Hash password (bcryptjs)
-    DB-->>Server: Saved user instance
-    Server-->>User: 201 Created Status
-
-    User->>Server: 2. POST /api/auth/login (Credentials)
-    Server->>DB: Query user records by email
-    DB-->>Server: User record with Hashed Password
-    Server->>Server: Verify password match
-    Server->>Server: Generate JWT (Sign with JWT_SECRET)
-    Server-->>User: 200 OK with User data + Token
-
-    Note over User, Server: Subsequent Requests to Protected Routes (e.g. POST /api/expenses)
-    User->>Server: Request Headers (Authorization: Bearer <token>)
-    Server->>Server: authMiddleware: Decode & Verify Token
-    alt Token is invalid or expired
-        Server-->>User: 401 Unauthorized Response
-    else Token is verified
-        Server->>DB: Query data associated with verified user ID
-        DB-->>Server: Expense Documents
-        Server-->>User: 200 OK with user-specific data
-    end
-```
-
-### JWT Execution Protocol:
-1.  **Signing:** When logging in, the server generates a token using `jsonwebtoken` with the user ID as payload, signed by `process.env.JWT_SECRET`, set to expire (e.g., 30 days).
-2.  **Storage:** The client saves the token in `localStorage` or session storage (or secure `HttpOnly` Cookies).
-3.  **Transmission:** The token is sent in the HTTP `Authorization` header using the `Bearer <token>` scheme.
-4.  **Authorization Middleware:** Express protects endpoint groups using an authentication interceptor:
-    ```javascript
-    import jwt from 'jsonwebtoken';
-    
-    export const protect = async (req, res, next) => {
-      let token;
-      if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-        try {
-          token = req.headers.authorization.split(' ')[1];
-          const decoded = jwt.verify(token, process.env.JWT_SECRET);
-          req.user = decoded; // Attach user payload to request
-          next();
-        } catch (error) {
-          res.status(401).json({ success: false, message: 'Not authorized, token failed' });
-        }
-      }
-      if (!token) {
-        res.status(401).json({ success: false, message: 'Not authorized, no token' });
-      }
-    };
-    ```
-
----
-
 ## ⚙️ Environment Variables
 
 Copy the `.env.example` templates in both folders to `.env` files and populate them with your credentials.
@@ -403,7 +339,6 @@ VITE_API_URL=http://localhost:8080
 PORT=8080
 MONGO_URI=mongodb+srv://<username>:<password>@cluster.dsfhwam.mongodb.net/expenseDB?retryWrites=true&w=majority
 CLIENT_URL=http://localhost:5173
-JWT_SECRET=your_super_secret_jwt_key_here
 ```
 
 ---
@@ -529,6 +464,7 @@ npm run dev
 
 ## 🔮 Future Improvements
 
+*   🔒 **User Authentication (JWT):** Add register/login pages with secure password hashing and token-based routing protection.
 *   🔔 **Budget Caps & Alerts:** Setup monthly expenditure thresholds with warning emails when limits cross 80%.
 *   💸 **Multi-Currency Support:** Integrate an exchange-rate API to let users track spending in multiple currencies.
 *   📄 **Data Exporter:** Export ledger data as downloadable spreadsheets (Excel) or PDF logs.
