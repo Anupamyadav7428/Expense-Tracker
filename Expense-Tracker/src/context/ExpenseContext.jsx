@@ -4,7 +4,8 @@ import { showError, showSuccess } from "../utils/toast.js"
 
 const ExpenseContext = createContext(null)
 
-const server = import.meta.env.VITE_API_URL || "http://localhost:8080"
+const server = import.meta.env.VITE_API_URL
+console.log(server)
 
 export const CATEGORIES = [
   "Food",
