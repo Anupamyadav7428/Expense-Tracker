@@ -6,7 +6,6 @@ import Sidebar from "./components/layout/Sidebar"
 import Home from "../src/pages/Home"
 import Transactions from "../src/pages/Transactions"
 import Analytics from "../src/pages/Analytics"
-import Settings from "../src/pages/Settings"
 
 function App() {
   return (
@@ -25,7 +24,6 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/transactions" element={<Transactions />} />
               <Route path="/analytics" element={<Analytics />} />
-              <Route path="/settings" element={<Settings />} />
             </Routes>
           </main>
         </div>

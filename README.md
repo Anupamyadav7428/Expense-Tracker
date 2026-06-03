@@ -110,7 +110,7 @@ Expense_Tracker/
 │   │   │   └── layout/       # Navbar.jsx, Sidebar.jsx
 │   │   ├── context/          # Context providers
 │   │   │   └── ExpenseContext.jsx # Global Expense state & API methods
-│   │   ├── pages/            # View pages (Home, Analytics, Transactions, Settings)
+│   │   ├── pages/            # View pages (Home, Analytics, Transactions)
 │   │   ├── utils/            # Toast.js helpers, loading spinners
 │   │   ├── App.css           # Global custom classes
 │   │   ├── App.jsx           # Main routing & application wrapper
